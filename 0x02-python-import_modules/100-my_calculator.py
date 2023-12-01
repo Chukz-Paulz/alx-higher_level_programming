@@ -1,28 +1,22 @@
 #!/usr/bin/python3
-from sys import argv
-from calculator_1 import add, sub, mul, div
+# 100-my_calculator.py
+# handles error messages
 
-def print_usage_and_exit():
-    print("Usage: ./100-my_calculator.py <a> <operator> <b>")
-    exit(1)
+from calculator_1 import add, sub, mul, div
+import sys
 
 if __name__ == "__main__":
-    if len(argv) != 4:
-        print_usage_and_exit()
+    ops = {"+": add, "-": sub, "*": mul, "/": div}
 
-    a, op, b = int(argv[1]), argv[2], int(argv[3])
+    if len(sys.argv) != 4:
+        print("Usage: ./100-my_calculator.py <a> <operator> <b>")
+        sys.exit(1)
 
-    if op in {"+", "-", "*", "/"}:
-        if op == "+":
-            result = add(a, b)
-        elif op == "-":
-            result = sub(a, b)
-        elif op == "*":
-            result = mul(a, b)
-        elif op == "/":
-            result = div(a, b)
+    a, op, b = int(sys.argv[1]), sys.argv[2], int(sys.argv[3])
 
-        print("{:d} {} {:d} = {:d}".format(a, op, b, result))
-    else:
+    if op not in ops:
         print("Unknown operator. Available operators: +, -, * and /")
-        exit(1)
+        sys.exit(1)
+
+    result = ops[op](a, b)
+    print("{} {} {} = {}".format(a, op, b, result))
