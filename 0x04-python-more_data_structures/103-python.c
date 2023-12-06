@@ -1,4 +1,11 @@
+/*
+ * File: 103-python.c
+ */
+
 #include <Python.h>
+
+void print_python_list(PyObject *p);
+void print_python_bytes(PyObject *p);
 
 /**
  * print_python_list - Prints basic info about Python lists.
@@ -9,9 +16,8 @@ void print_python_list(PyObject *p)
 	int size, alloc, i;
 	const char *type;
 	PyListObject *list = (PyListObject *)p;
-	PyVarObject *var = (PyVarObject *)p;
 
-	size = var->ob_size;
+	size = Py_SIZE(p);
 	alloc = list->allocated;
 
 	printf("[*] Python list info\n");
@@ -22,6 +28,8 @@ void print_python_list(PyObject *p)
 	{
 		type = list->ob_item[i]->ob_type->tp_name;
 		printf("Element %d: %s\n", i, type);
+		if (strcmp(type, "bytes") == 0)
+		print_python_bytes(list->ob_item[i]);
 	}
 }
 
@@ -41,14 +49,18 @@ void print_python_bytes(PyObject *p)
 		return;
 	}
 
-	printf("  size: %ld\n", ((PyVarObject *)p)->ob_size);
+	printf("  size: %ld\n", Py_SIZE(p));
 	printf("  trying string: %s\n", bytes->ob_sval);
 
-	size = ((PyVarObject *)p)->ob_size > 10 ? 10 : ((PyVarObject *)p)->ob_size + 1;
+	size = Py_SIZE(p) > 10 ? 10 : Py_SIZE(p) + 1;
 
 	printf("  first %d bytes: ", size);
 	for (i = 0; i < size; i++)
 	{
-		printf("%02hhx%s", bytes->ob_sval[i], i == (size - 1) ? "\n" : " ");
+		printf("%02hhx", bytes->ob_sval[i]);
+		if (i == (size - 1))
+		printf("\n");
+	else
+		printf(" ");
 	}
 }
