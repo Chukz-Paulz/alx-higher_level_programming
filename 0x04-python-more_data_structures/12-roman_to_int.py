@@ -17,18 +17,20 @@ def roman_to_int(roman_string):
     for i in range(len(roman_string)):
         current_value = roman_dict.get(roman_string[i], 0)
 
-        if i + 1 < len(roman_string):
-            next_value = roman_dict.get(roman_string[i + 1], 0)
-        else:
-            next_value = 0
-
         if current_value == 0:
             return 0
 
-        if i + 1 < len(roman_string) and current_value < next_value:
-            num -= current_value
+        if i + 1 < len(roman_string):
+            next_value = roman_dict.get(roman_string[i + 1], 0)
+
+            if next_value == 0:
+                return 0
+
+            if current_value < next_value:
+                num -= current_value
+            else:
+                num += current_value
         else:
             num += current_value
 
     return num
-

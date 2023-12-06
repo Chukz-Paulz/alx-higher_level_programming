@@ -1,14 +1,19 @@
+/*
+ * File: 103-python.c
+ */
+
 #include <Python.h>
 
+void print_python_list(PyObject *p);
 void print_python_bytes(PyObject *p);
 
 /**
- * print_python_list - This will Prints basic info about Python lists.
+ * print_python_list - This prints basic info about Python lists.
  * @p: A PyObject list object.
  */
 void print_python_list(PyObject *p)
 {
-	/*Declaration*/
+	/*Declarations*/
 	int size, alloc, i;
 	const char *type;
 	PyListObject *list = (PyListObject *)p;
@@ -23,44 +28,45 @@ void print_python_list(PyObject *p)
 
 	for (i = 0; i < size; i++)
 	{
-	type = Py_TYPE(list->ob_item[i])->tp_name;
-	printf("Element %d: %s\n", i, type);
-	if (strcmp(type, "bytes") == 0)
-		print_python_bytes(list->ob_item[i]);
+		type = list->ob_item[i]->ob_type->tp_name;
+		printf("Element %d: %s\n", i, type);
+		if (strcmp(type, "bytes") == 0)
+			print_python_bytes(list->ob_item[i]);
 	}
 }
 
 /**
- * print_python_bytes - Prints basic info about Python byte objects.
+ * print_python_bytes - This prints basic info about Python byte objects.
  * @p: A PyObject byte object.
  */
 void print_python_bytes(PyObject *p)
 {
+	/*Declarations*/
 	unsigned char i, size;
 	PyBytesObject *bytes = (PyBytesObject *)p;
 
 	printf("[.] bytes object info\n");
-	if (strcmp(Py_TYPE(p)->tp_name, "bytes") != 0)
+	if (strcmp(p->ob_type->tp_name, "bytes") != 0)
 	{
 		printf("  [ERROR] Invalid Bytes Object\n");
 		return;
 	}
 
-	printf("  size: %ld\n", Py_SIZE(p));
+	printf("  size: %ld\n", ((PyVarObject *)p)->ob_size);
 	printf("  trying string: %s\n", bytes->ob_sval);
 
-	if (Py_SIZE(p) > 10)
+	if (((PyVarObject *)p)->ob_size > 10)
 		size = 10;
 	else
-		size = Py_SIZE(p) + 1;
+		size = ((PyVarObject *)p)->ob_size + 1;
 
 	printf("  first %d bytes: ", size);
 	for (i = 0; i < size; i++)
 	{
 		printf("%02hhx", bytes->ob_sval[i]);
-	if (i == (size - 1))
-		printf("\n");
-	else
-		printf(" ");
+		if (i == (size - 1))
+			printf("\n");
+		else
+			printf(" ");
 	}
 }
