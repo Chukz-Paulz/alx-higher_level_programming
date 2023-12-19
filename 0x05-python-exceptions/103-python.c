@@ -88,7 +88,7 @@ void print_python_bytes(PyObject *p)
  */
 void print_python_float(PyObject *p)
 {
-	char *buffer = NULL;
+	/*char *buffer = NULL;*/
 	PyFloatObject *float_obj;
 
 	if (!PyFloat_Check(p))
