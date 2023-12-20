@@ -30,10 +30,3 @@ class Square:
         """Return the current area of the square."""
         return self.__size * self.__size
 
-
-
-
-
-Message ChatGPT…
-
-ChatGPT can make mistakes. Consider checking important information.
