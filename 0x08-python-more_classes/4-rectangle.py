@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 """Defines a Rectangle class."""
-
-
 class Rectangle:
     """Represent a rectangle."""
 
@@ -18,47 +16,41 @@ class Rectangle:
     @property
     def width(self):
         """Get/set the width of the Rectangle."""
-        return self._width
+        return self.__width
 
     @width.setter
     def width(self, value):
-        self._validate_and_set_dimension('_width', value)
+        self._validate_dimension('_width', value)
 
     @property
     def height(self):
         """Get/set the height of the Rectangle."""
-        return self._height
+        return self.__height
 
     @height.setter
     def height(self, value):
-        self._validate_and_set_dimension('_height', value)
+        self._validate_dimension('_height', value)
 
     def area(self):
         """Return the area of the Rectangle."""
-        return self._width * self._height
+        return self.__width * self.__height
 
     def perimeter(self):
         """Return the perimeter of the Rectangle."""
-        if self._width == 0 or self._height == 0:
-            return 0
-        return 2 * (self._width + self._height)
+        return 2 * (self.__width + self.__height) if self.__width != 0 and self.__height != 0 else 0
 
     def __str__(self):
         """Return the printable representation of the Rectangle.
 
         Represents the rectangle with the # character.
         """
-        if self._width == 0 or self._height == 0:
-            return ""
-
-        rect = ['#' * self._width + '\n' for _ in range(self._height)]
-        return "".join(rect)
+        return '\n'.join(['#' * self.__width for _ in range(self.__height)])
 
     def __repr__(self):
         """Return the string representation of the Rectangle."""
-        return f"Rectangle({self._width}, {self._height})"
+        return f"Rectangle({self.__width}, {self.__height})"
 
-    def _validate_and_set_dimension(self, attribute, value):
+    def _validate_dimension(self, attribute, value):
         """Validate and set the width or height attribute."""
         if not isinstance(value, int):
             raise TypeError(f"{attribute[1:]} must be an integer")
