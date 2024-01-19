@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Implementation of square.py
+# implementation for square.py
 """Defines a square class."""
 from models.rectangle import Rectangle
 
@@ -25,7 +25,6 @@ class Square(Rectangle):
 
     @size.setter
     def size(self, value):
-        self.validate_dimension("size", value)
         self.width = value
         self.height = value
 
@@ -41,20 +40,28 @@ class Square(Rectangle):
             **kwargs (dict): New key/value pairs of attributes.
         """
         if args and len(args) != 0:
-            for i, arg in enumerate(args):
-                if i == 0 and arg is not None:
-                    self.id = arg
-                elif i == 1:
+            a = 0
+            for arg in args:
+                if a == 0:
+                    if arg is None:
+                        self.__init__(self.size, self.x, self.y)
+                    else:
+                        self.id = arg
+                elif a == 1:
                     self.size = arg
-                elif i == 2:
+                elif a == 2:
                     self.x = arg
-                elif i == 3:
+                elif a == 3:
                     self.y = arg
+                a += 1
 
         elif kwargs and len(kwargs) != 0:
             for k, v in kwargs.items():
-                if k == "id" and v is not None:
-                    self.id = v
+                if k == "id":
+                    if v is None:
+                        self.__init__(self.size, self.x, self.y)
+                    else:
+                        self.id = v
                 elif k == "size":
                     self.size = v
                 elif k == "x":
@@ -73,10 +80,5 @@ class Square(Rectangle):
 
     def __str__(self):
         """Return the print() and str() representation of a Square."""
-        return f"[Square] ({self.id}) {self.x}/{self.y} - {self.width}"
-
-    def validate_dimension(self, name, value):
-        if type(value) != int:
-            raise TypeError(f"{name} must be an integer")
-        if value <= 0:
-            raise ValueError(f"{name} must be > 0")
+        return "[Square] ({}) {}/{} - {}".format(self.id, self.x, self.y,
+                                                 self.width)

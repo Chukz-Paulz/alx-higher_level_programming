@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-# rectangle.py
-# Brennan D Baraban <375@holbertonschool.com>
+# implementation for rectangle.py
 """Defines a rectangle class."""
 from models.base import Base
 
@@ -18,16 +17,16 @@ class Rectangle(Base):
             y (int): The y coordinate of the new Rectangle.
             id (int): The identity of the new Rectangle.
         Raises:
-            TypeError: If either width or height is not an int.
-            ValueError: If either width or height <= 0.
-            TypeError: If either x or y is not an int.
-            ValueError: If either x or y < 0.
+            TypeError: If either of width or height is not an int.
+            ValueError: If either of width or height <= 0.
+            TypeError: If either of x or y is not an int.
+            ValueError: If either of x or y < 0.
         """
-        super().__init__(id)
         self.width = width
         self.height = height
         self.x = x
         self.y = y
+        super().__init__(id)
 
     @property
     def width(self):
@@ -36,7 +35,10 @@ class Rectangle(Base):
 
     @width.setter
     def width(self, value):
-        self.validate_dimension("width", value)
+        if type(value) != int:
+            raise TypeError("width must be an integer")
+        if value <= 0:
+            raise ValueError("width must be > 0")
         self.__width = value
 
     @property
@@ -46,7 +48,10 @@ class Rectangle(Base):
 
     @height.setter
     def height(self, value):
-        self.validate_dimension("height", value)
+        if type(value) != int:
+            raise TypeError("height must be an integer")
+        if value <= 0:
+            raise ValueError("height must be > 0")
         self.__height = value
 
     @property
@@ -56,7 +61,10 @@ class Rectangle(Base):
 
     @x.setter
     def x(self, value):
-        self.validate_coordinate("x", value)
+        if type(value) != int:
+            raise TypeError("x must be an integer")
+        if value < 0:
+            raise ValueError("x must be >= 0")
         self.__x = value
 
     @property
@@ -66,20 +74,11 @@ class Rectangle(Base):
 
     @y.setter
     def y(self, value):
-        self.validate_coordinate("y", value)
-        self.__y = value
-
-    def validate_dimension(self, name, value):
         if type(value) != int:
-            raise TypeError(f"{name} must be an integer")
-        if value <= 0:
-            raise ValueError(f"{name} must be > 0")
-
-    def validate_coordinate(self, name, value):
-        if type(value) != int:
-            raise TypeError(f"{name} must be an integer")
+            raise TypeError("y must be an integer")
         if value < 0:
-            raise ValueError(f"{name} must be >= 0")
+            raise ValueError("y must be >= 0")
+        self.__y = value
 
     def area(self):
         """Return the area of the Rectangle."""
@@ -91,10 +90,10 @@ class Rectangle(Base):
             print("")
             return
 
-        [print("") for _ in range(self.y)]
-        for _ in range(self.height):
-            [print(" ", end="") for _ in range(self.x)]
-            [print("#", end="") for _ in range(self.width)]
+        [print("") for y in range(self.y)]
+        for h in range(self.height):
+            [print(" ", end="") for x in range(self.x)]
+            [print("#", end="") for w in range(self.width)]
             print("")
 
     def update(self, *args, **kwargs):
@@ -110,22 +109,30 @@ class Rectangle(Base):
             **kwargs (dict): New key/value pairs of attributes.
         """
         if args and len(args) != 0:
-            for i, arg in enumerate(args):
-                if i == 0 and arg is not None:
-                    self.id = arg
-                elif i == 1:
+            a = 0
+            for arg in args:
+                if a == 0:
+                    if arg is None:
+                        self.__init__(self.width, self.height, self.x, self.y)
+                    else:
+                        self.id = arg
+                elif a == 1:
                     self.width = arg
-                elif i == 2:
+                elif a == 2:
                     self.height = arg
-                elif i == 3:
+                elif a == 3:
                     self.x = arg
-                elif i == 4:
+                elif a == 4:
                     self.y = arg
+                a += 1
 
         elif kwargs and len(kwargs) != 0:
             for k, v in kwargs.items():
-                if k == "id" and v is not None:
-                    self.id = v
+                if k == "id":
+                    if v is None:
+                        self.__init__(self.width, self.height, self.x, self.y)
+                    else:
+                        self.id = v
                 elif k == "width":
                     self.width = v
                 elif k == "height":
@@ -147,5 +154,7 @@ class Rectangle(Base):
 
     def __str__(self):
         """Return the print() and str() representation of the Rectangle."""
-        return f"[Rectangle] ({self.id}) {self.x}/{self.y} - {self.width}/{self.height}"
+        return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id,
+                                                       self.x, self.y,
+                                                       self.width, self.height)
 
