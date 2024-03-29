@@ -1,9 +1,9 @@
 #!/usr/bin/python3
+"""Fetches https://intranet.hbtn.io/status."""
 import requests
 
 if __name__ == "__main__":
-    url = 'https://alx-intranet.hbtn.io/status'
-    response = requests.get(url)
+    r = requests.get("https://intranet.hbtn.io/status")
     print("Body response:")
-    print("\t- type:", type(response.text))
-    print("\t- content:", response.text)
+    print(f"\t- type: {type(r.text)}")
+    print(f"\t- content: {r.text}")
